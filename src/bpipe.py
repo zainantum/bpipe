@@ -20,6 +20,12 @@ from opentelemetry.trace import StatusCode
 
 import threading
 
+class TooBigError(Exception):
+    pass
+
+
+from lab_initialization import lab_initialization
+
 
 from exorde_data import (
     CreatedAt, 
@@ -121,7 +127,7 @@ async def processing_logic(app, batch):
         try:
             timeout = 60
             logging.info("PROCESS START")
-            processed_batch = process_batch(batch, app["static_configuration"])
+            processed_batch = process_batch(batch, app["lab_configuration"])
             logging.info(f"PROCESS OK - ADDING TO BATCH : {processed_batch}")
             processing_span.set_status(StatusCode.OK)
             
@@ -301,6 +307,7 @@ async def configuration_init(app):
     # arguments, live_configuration
     live_configuration: LiveConfiguration = await get_live_configuration()
     app['live_configuration'] = live_configuration
+    app['lab_configuration'] = lab_initialization()
 
 
 def start_spotter():

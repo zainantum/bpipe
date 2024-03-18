@@ -222,10 +222,9 @@ from opentelemetry import trace
 from opentelemetry.trace import StatusCode
 
 def process_batch(
-    batch: list[tuple[int, Processed]], static_configuration
+    batch: list[tuple[int, Processed]], lab_configuration 
 ) -> Batch:
     tracer = trace.get_tracer(__name__)
-    lab_configuration: dict = static_configuration["lab_configuration"]
     logging.info(f"running batch for {len(batch)}")
     with tracer.start_as_current_span("tag") as tag_span:
         analysis_results: list[Analysis] = tag(
