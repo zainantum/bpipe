@@ -1,4 +1,3 @@
-import requests
 import spacy
 import torch
 from transformers import pipeline

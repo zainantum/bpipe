@@ -26,7 +26,7 @@ RUN apt-get update && apt-get install -y \
     libxml2-dev \
     libxmlsec1-dev \
     liblzma-dev \
-    git
+    git 
 
 # Download and compile Python 3.10
 RUN cd /tmp && \
@@ -74,7 +74,9 @@ RUN pip3.10 install --no-cache-dir \
         wtpsplit==1.3.0 \
         finvader==1.0.2 \
         vaderSentiment==3.3.2 \
-        swifter==1.3.4
+        swifter==1.3.4 \
+        spacy \
+        spacy-transformers
 
 # Clean cache now that we have installed everything
 RUN rm -rf /root/.cache/* \
@@ -84,6 +86,8 @@ FROM with_deps as with_models
 
 COPY ./install.py /app/install.py
 RUN python3.10 /app/install.py
+
+RUN python3.10 -m spacy download en_core_web_trf
 
 FROM with_models as with_code
 
