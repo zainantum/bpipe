@@ -6,6 +6,7 @@ from finvader import finvader
 from huggingface_hub import hf_hub_download
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 import tensorflow as tf
+import numpy as np
 import swifter, os
 from exorde_data import (
     Translation,
