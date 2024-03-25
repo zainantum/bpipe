@@ -58,7 +58,8 @@ def setup_tracing():
     span_processor = BatchSpanProcessor(jaeger_exporter)
     trace_provider.add_span_processor(span_processor)
     trace.set_tracer_provider(trace_provider)
-    
+
+
 app = web.Application()
 
 from aioprometheus.collectors import Counter, Histogram, Gauge
@@ -125,7 +126,6 @@ async def processing_logic(app, batch):
     tracer = trace.get_tracer(__name__)
     with tracer.start_as_current_span("process_batch") as processing_span:
         try:
-            timeout = 60
             logging.info("PROCESS START")
             processed_batch = process_batch(batch, app["lab_configuration"])
             logging.info(f"PROCESS OK - ADDING TO BATCH : {processed_batch}")
@@ -311,7 +311,8 @@ async def configuration_init(app):
 
 
 def start_spotter():
-    setup_tracing()
+    if os.getenv("TRACE", False) == "true":
+        setup_tracing()
     logging.basicConfig(
         level=logging.DEBUG, 
         format='%(asctime)s - %(levelname)s - %(message)s'
