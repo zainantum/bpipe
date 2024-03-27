@@ -7,7 +7,7 @@ import signal
 from aioprometheus.collectors import REGISTRY
 from aioprometheus.renderer import render
 from aiohttp import web, ClientSession
-import time
+import time, random
 
 from opentelemetry import trace
 from opentelemetry.exporter.jaeger.thrift import JaegerExporter
@@ -122,6 +122,33 @@ from exorde_data import CreatedAt, Content, Domain, Url, Title
 
 # Summary, Picture, Author, ExternalId, ExternalParentId,
 
+
+
+async def get_target():
+    """Asks the orchestrator for a list of `transactioneer`"""
+    async def fetch_ips_from_service(
+        filter_key: str, filter_value:str
+    ) -> list[str]:
+        orchestrator_name = os.getenv("ORCHESTRATOR_NAME", "orchestrator")
+        base_url = f"http://{orchestrator_name}:8000/get"
+        query_params = {filter_key: filter_value}
+        async with ClientSession() as session:
+            async with session.get(base_url, params=query_params) as response:
+                if response.status == 200:
+                    ips = await response.json()
+                    return ips
+                else:
+                    error_message = await response.text()
+                    print(f"Failed to fetch IPs: {error_message}")
+                    return []
+    """ retrieves a list of upipes """
+    targets = await fetch_ips_from_service("network.exorde.service", "transactioneer")
+    logging.info(f"get_target.targets = {targets}")
+    choice = random.choice(targets)
+    logging.info(f"get_target.choice = {choice}")
+    return choice
+
+
 async def processing_logic(app, batch):
     tracer = trace.get_tracer(__name__)
     with tracer.start_as_current_span("process_batch") as processing_span:
@@ -133,7 +160,7 @@ async def processing_logic(app, batch):
             
             # New span for sending the processed batch
             with tracer.start_as_current_span("send_processed_batch") as send_span:
-                target = os.getenv('transactioneer')
+                target = await get_target()
                 if target:
                     async with ClientSession() as session:
                         async with session.post(
@@ -241,7 +268,6 @@ def start_processing_thread(app):
     monitor.start()
     return stop_event, monitor
 
-
 async def setup_thread(app):
     app['process_queue'] = asyncio.Queue()
     stop_event, monitor_thread = start_processing_thread(app)
@@ -252,7 +278,6 @@ async def setup_thread(app):
 async def cleanup(app):
     app['stop_event'].set()  # Signal the thread to stop
     app['monitor_thread'].join()  # Wait for the monitor thread to finish
-
 
 async def receive_item(request):
     global receive_counter

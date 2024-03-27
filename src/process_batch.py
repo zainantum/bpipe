@@ -272,7 +272,7 @@ def process_batch(
             collection_client_version=CollectionClientVersion(
                 f"exorde:v.{metadata.version('exorde_data')}"
             ),
-            collection_module=CollectionModule("unknown"),
+            collection_module=CollectionModule("micro"),
             collected_at=CollectedAt(datetime.now().isoformat() + "Z"),
         )
         if not complete_processes.get(id, {}):
