@@ -162,7 +162,15 @@ async def get_target():
                     print(f"Failed to fetch IPs: {error_message}")
                     return []
     """ retrieves a list of upipes """
-    targets = await fetch_ips_from_service("network.exorde.service", "transactioneer")
+    pre_loaded_targets = os.getenv("TRANSACTIONEER_ADDR", "")
+    targets = ''
+    if len(pre_loaded_targets) == 0:
+        targets = await fetch_ips_from_service("network.exorde.service", "transactioneer")
+    else:
+        if ',' in pre_loaded_targets:
+            targets = pre_loaded_targets.split(',')
+        else:
+            targets = pre_loaded_targets
     logging.info(f"get_target.targets = {targets}")
     choice = random.choice(targets)
     logging.info(f"get_target.choice = {choice}")
