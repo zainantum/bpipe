@@ -7,6 +7,7 @@ from exorde_data import (
     ProtocolAnalysis,
     ProcessedItem,
     Batch,
+    Content,
     BatchKindEnum,
     CollectionClientVersion,
     CollectedAt,
@@ -236,6 +237,8 @@ def process_batch(
     complete_processes: dict[int, list[ProcessedItem]] = {}
     for (id, processed), analysis in zip(batch, analysis_results):
         prot_item: ProtocolItem = ProtocolItem(
+            raw_content=Content(processed.item.content),
+            translated_content=Content(processed.translation.translation),
             created_at=processed.item.created_at,
             domain=processed.item.domain,
             url=Url(processed.item.url),
