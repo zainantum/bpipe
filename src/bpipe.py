@@ -80,7 +80,7 @@ def setup_tracing(no_tracing=False):
 
 
 
-app = web.Application()
+app = web.Application(client_max_size=500 * 1024 * 1024)
 
 from aioprometheus.collectors import Counter, Histogram, Gauge
 
