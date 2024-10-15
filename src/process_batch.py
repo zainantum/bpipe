@@ -260,7 +260,7 @@ def process_batch(
         completed: ProcessedItem = ProcessedItem(
             item=prot_item,
             analysis=ProtocolAnalysis(
-                classification=processed.classification,
+                classification=analysis.classification,
                 top_keywords=processed.top_keywords,
                 language_score=analysis.language_score,
                 #gender=analysis.gender,

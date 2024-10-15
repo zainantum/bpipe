@@ -77,8 +77,7 @@ RUN pip3.10 install --no-cache-dir \
         finvader==1.0.2 \
         vaderSentiment==3.3.2 \
         swifter==1.3.4 \
-        spacy \
-        spacy-transformers
+        spacy==3.5.1
 
 # Clean cache now that we have installed everything
 RUN rm -rf /root/.cache/* \
