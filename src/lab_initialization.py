@@ -1,6 +1,7 @@
 import spacy
 import json
 import torch
+import requests
 from transformers import pipeline
 from argostranslate import translate as _translate
 from sentence_transformers import SentenceTransformer
@@ -105,7 +106,11 @@ def lab_initialization():
         raise err
     installed_languages = _translate.get_installed_languages()
     models = initialize_models(device)
+    labels = requests.get(
+        "https://raw.githubusercontent.com/exorde-labs/TestnetProtocol/main/targets/class_names.json"
+    ).json()
     return {
+        "labeldict": labels,
         "device": device, # bpipe & upipe
         "mappings": mappings, #bpipe
         "nlp": nlp, #bpipe
