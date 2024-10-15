@@ -59,7 +59,7 @@ RUN pip3.10 install opentelemetry-api \
         aioprometheus==23.3.0
 
 RUN pip3.10 install --no-cache-dir \
-        'git+https://github.com/exorde-labs/exorde_data.git@temp' \
+        'git+https://github.com/exorde-labs/exorde_data.git@full' \
         asyncio \
         aiohttp \
         pyyaml \
