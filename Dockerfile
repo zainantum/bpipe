@@ -56,7 +56,8 @@ RUN pip3.10 install opentelemetry-api \
         opentelemetry-exporter-jaeger \
         opentelemetry-instrumentation-aiohttp-client \
         opentelemetry-sdk opentelemetry-exporter-otlp \
-        aioprometheus==23.3.0
+        aioprometheus==23.3.0 \
+        scikit-learn==1.5.2
 
 RUN pip3.10 install --no-cache-dir \
         'git+https://github.com/exorde-labs/exorde_data.git@full' \

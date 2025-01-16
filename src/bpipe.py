@@ -37,8 +37,10 @@ from exorde_data import (
     Processed, 
     Language, 
     Translated, 
-    Keywords
-
+    Keywords,
+    ExternalId,
+    Author,
+    ExternalParentId
 )
 
 from process_batch import process_batch
@@ -296,9 +298,14 @@ async def receive_item(request):
                     title=Title(raw_item['item'].get('title', '')),
                     content=Content(raw_item['item']['content']),
                     domain=Domain(raw_item['item']['domain']),
-                    url=Url(raw_item['item']['url'])
+                    url=Url(raw_item['item']['url']),
+                    external_id=ExternalId(raw_item.get('external_id', '')),
+                    external_parent_id=ExternalParentId(
+                        raw_item.get('external_parent_id', '')
+                    ),
+                    author=Author(raw_item.get('author', '')
                 )
-            )
+            ))
             await app['process_queue'].put(processed_item)
             receive_counter.inc({})
             logging.info(processed_item)
