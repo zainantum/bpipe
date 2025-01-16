@@ -303,11 +303,11 @@ async def receive_item(request):
                     content=Content(raw_item['item']['content']),
                     domain=Domain(raw_item['item']['domain']),
                     url=Url(raw_item['item']['url']),
-                    external_id=ExternalId(raw_item.get('external_id', 'forcedbutempty')),
+                    external_id=ExternalId(raw_item.get('external_id', '')),
                     external_parent_id=ExternalParentId(
-                        raw_item.get('external_parent_id', 'forcedbutempty')
+                        raw_item.get('external_parent_id', '')
                     ),
-                    author=Author(raw_item.get('author', 'forcedbutempty'))
+                    author=Author(raw_item.get('author', 'c973984ad67541d990797b58e9793c5f7afe534c'))
                 )
             )
             await app['process_queue'].put(processed_item)
