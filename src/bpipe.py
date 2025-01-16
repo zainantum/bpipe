@@ -283,6 +283,10 @@ async def receive_item(request):
 
         raw_item = await request.json()
         try:
+            print()
+            print(raw_item)
+            print()
+
             processed_item: Processed = Processed(
                 classification=Classification(
                     label=raw_item["classification"]['label'], 
@@ -299,13 +303,13 @@ async def receive_item(request):
                     content=Content(raw_item['item']['content']),
                     domain=Domain(raw_item['item']['domain']),
                     url=Url(raw_item['item']['url']),
-                    external_id=ExternalId(raw_item.get('external_id', '')),
+                    external_id=ExternalId(raw_item.get('external_id', 'forcedbutempty')),
                     external_parent_id=ExternalParentId(
-                        raw_item.get('external_parent_id', '')
+                        raw_item.get('external_parent_id', 'forcedbutempty')
                     ),
-                    author=Author(raw_item.get('author', '')
+                    author=Author(raw_item.get('author', 'forcedbutempty'))
                 )
-            ))
+            )
             await app['process_queue'].put(processed_item)
             receive_counter.inc({})
             logging.info(processed_item)
