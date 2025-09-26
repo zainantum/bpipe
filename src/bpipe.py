@@ -299,11 +299,11 @@ async def receive_item(request):
                     content=Content(raw_item['item']['content']),
                     domain=Domain(raw_item['item']['domain']),
                     url=Url(raw_item['item']['url']),
-                    external_id=ExternalId(raw_item.get('external_id', '')),
+                    external_id=ExternalId(raw_item['item'].get('external_id', '')),
                     external_parent_id=ExternalParentId(
-                        raw_item.get('external_parent_id', '')
+                        raw_item['item'].get('external_parent_id', '')
                     ),
-                    author=Author(raw_item.get('author', ''))
+                    author=Author(raw_item['item'].get('author', ''))
                 )
             )
             await app['process_queue'].put(processed_item)
